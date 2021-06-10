@@ -1,3 +1,5 @@
+import org.apache.tools.ant.filters.ConcatFilter
+
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
@@ -5,6 +7,7 @@ plugins {
     id 'kotlin-kapt'
     id 'kotlin-platform-android'
     id 'dagger.hilt.android.plugin'
+    id 'com.google.secrets_gradle_plugin' version '0.5'
 }
 
 android {
@@ -34,6 +37,9 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
@@ -50,6 +56,10 @@ dependencies {
     //hilt dependencies
     implementation "com.google.dagger:hilt-android:$hilt_version"
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hiltViewModelVersion"
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.0'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
     androidTestImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
     kaptAndroidTest "com.google.dagger:hilt-android-compiler:$hilt_version"
@@ -71,4 +81,12 @@ dependencies {
     implementation "androidx.arch.core:core-testing:$coreTestingVersion"
     implementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"
     implementation "androidx.test.espresso:espresso-contrib:$espressoVersion"
+}
+
+secrets {
+    // To add your Maps API key to this project:
+    // 1. Open the root project's local.properties file
+    // 2. Add this line, where YOUR_API_KEY is your API key:
+    //        MAPS_API_KEY=YOUR_API_KEY
+    defaultPropertiesFileName 'local.defaults.properties'
 }

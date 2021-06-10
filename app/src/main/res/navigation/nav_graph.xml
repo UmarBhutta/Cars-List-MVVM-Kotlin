@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/MapFragment">
+
+    <fragment
+        android:id="@+id/MapFragment"
+        android:name="com.capricorn.carslist.ui.component.MapFragment"
+        android:label="@string/map_fragment_label"
+        tools:layout="@layout/fragment_map">
+
+        <action
+            android:id="@+id/action_MapFragment_to_ListFragment"
+            app:destination="@id/ListFragment" />
+        <action android:id="@+id/action_MapFragment_to_CarDetailFragment"
+            app:destination="@id/CarDetailFragment"/>
+    </fragment>
+    <fragment
+        android:id="@+id/ListFragment"
+        android:name="com.capricorn.carslist.ui.component.ListFragment"
+        android:label="@string/List_fragment_label"
+        tools:layout="@layout/fragment_list">
+
+        <action
+            android:id="@+id/action_ListFragment_to_MapFragment"
+            app:destination="@id/MapFragment" />
+        <action android:id="@+id/action_ListFragment_to_CarDetailFragment"
+            app:destination="@id/CarDetailFragment"/>
+    </fragment>
+
+    <dialog
+        android:id="@+id/CarDetailFragment"
+        android:name="com.capricorn.carslist.ui.component.CarDetailBottomSheet"
+        android:label="@string/car_detail_label"
+        tools:layout="@layout/fragment_car_detail_bottom_sheet">
+
+    </dialog>
+</navigation>
