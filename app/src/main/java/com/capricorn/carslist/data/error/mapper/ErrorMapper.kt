@@ -5,11 +5,12 @@ import com.capricorn.carslist.R
 import com.capricorn.carslist.data.error.NETWORK_ERROR
 import com.capricorn.carslist.data.error.NO_INTERNET_CONNECTION
 import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
 /**
  * Created by Muhammad Umar on 11/06/2021.
  */
-class ErrorMapper constructor(@ApplicationContext val context: Context) : Mapper {
+class ErrorMapper @Inject constructor(@ApplicationContext val context: Context) : Mapper {
     override fun getErrorString(stringResourceId: Int): String {
         return context.getString(stringResourceId)
     }

@@ -1,4 +1,4 @@
-package com.capricorn.carslist.usecase.error
+package com.capricorn.carslist.errorFactory
 
 import com.capricorn.carslist.data.error.Error
 

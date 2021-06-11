@@ -8,5 +8,5 @@ import kotlinx.coroutines.flow.Flow
  * Created by Muhammad Umar on 11/06/2021.
  */
 interface NetworkDataSource {
-    suspend fun requestCarList(): Flow<Resource<List<Car>>>
+    suspend fun requestCarList(): Resource<List<Car>>
 }

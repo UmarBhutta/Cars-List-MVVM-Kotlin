@@ -1,7 +1,9 @@
 package com.capricorn.carslist.di
 
 import com.capricorn.carslist.data.error.mapper.ErrorMapper
-import com.capricorn.carslist.usecase.error.ErrorFactoryManager
+import com.capricorn.carslist.data.error.mapper.Mapper
+import com.capricorn.carslist.errorFactory.ErrorFactory
+import com.capricorn.carslist.errorFactory.ErrorFactoryManager
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -17,10 +19,10 @@ abstract class ErrorModule {
 
     @Binds
     @Singleton
-    abstract fun provideErrorFactoryManager(errorFactoryManager: ErrorFactoryManager) : ErrorFactoryManager
+    abstract fun provideErrorFactoryManager(errorFactoryManager: ErrorFactoryManager) : ErrorFactory
 
     @Binds
     @Singleton
-    abstract fun provideErrorMapper(errorMapper: ErrorMapper) : ErrorMapper
+    abstract fun provideErrorMapper(errorMapper: ErrorMapper) : Mapper
 
 }

@@ -1,7 +1,9 @@
 package com.capricorn.carslist.di
 
 import com.capricorn.carslist.data.DataRepository
+import com.capricorn.carslist.data.DataRepositorySource
 import com.capricorn.carslist.data.api.NetworkData
+import com.capricorn.carslist.data.api.NetworkDataSource
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -17,10 +19,10 @@ abstract class DataModule {
 
     @Binds
     @Singleton
-    abstract fun provideNetworkData(networkData: NetworkData) : NetworkData
+    abstract fun provideNetworkData(networkData: NetworkData) : NetworkDataSource
 
     @Binds
     @Singleton
-    abstract fun provideDataRepository(dataRepository: DataRepository) : DataRepository
+    abstract fun provideDataRepository(dataRepository: DataRepository) : DataRepositorySource
 
 }

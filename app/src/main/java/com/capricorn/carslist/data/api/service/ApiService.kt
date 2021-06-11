@@ -1,7 +1,7 @@
 package com.capricorn.carslist.data.api.service
 
 import com.capricorn.carslist.data.dto.Car
-import kotlinx.coroutines.flow.Flow
+import retrofit2.Response
 import retrofit2.http.GET
 
 /**
@@ -10,6 +10,6 @@ import retrofit2.http.GET
 interface ApiService {
 
     @GET("/codingtask/cars")
-    suspend fun getCarList() : Flow<List<Car>>
+    suspend fun getCarList() : Response<List<Car>>
 
 }
