@@ -7,6 +7,6 @@ import kotlinx.coroutines.flow.Flow
 /**
  * Created by Muhammad Umar on 11/06/2021.
  */
-interface DataRepositoryImpl {
+interface DataRepositorySource {
     suspend fun requestCarList():Flow<Resource<List<Car>>>
 }

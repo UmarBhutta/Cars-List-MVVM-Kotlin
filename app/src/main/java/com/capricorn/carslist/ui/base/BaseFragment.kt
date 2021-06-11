@@ -1,4 +1,4 @@
-package com.capricorn.carslist.ui
+package com.capricorn.carslist.ui.base
 
 import androidx.fragment.app.Fragment
 

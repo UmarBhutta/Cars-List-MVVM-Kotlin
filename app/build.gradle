@@ -23,6 +23,9 @@ android {
         multiDexEnabled true
 
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+
+        buildConfigField 'String', 'BASE_URL', '"https://cdn.sixt.io/"'
+
     }
 
     buildTypes {

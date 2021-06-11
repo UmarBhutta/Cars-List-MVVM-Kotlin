@@ -1,4 +1,4 @@
-package com.capricorn.carslist.ui.component
+package com.capricorn.carslist.ui.home
 
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
