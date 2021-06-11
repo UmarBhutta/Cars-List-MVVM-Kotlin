@@ -48,7 +48,8 @@ class MapFragment : Fragment(),OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonFirst.setOnClickListener {
-            findNavController().navigate(R.id.action_MapFragment_to_ListFragment)
+            //findNavController().navigate(R.id.action_MapFragment_to_ListFragment)
+            findNavController().navigate(R.id.action_MapFragment_to_CarDetailFragment)
         }
 
 
