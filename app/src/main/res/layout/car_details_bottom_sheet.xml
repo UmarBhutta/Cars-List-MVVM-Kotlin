@@ -57,7 +57,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="@dimen/space_normal"
-        android:scaleType="fitCenter"
+        android:scaleType="centerInside"
         tools:srcCompat="@drawable/placeholder" />
 
     <TextView
@@ -99,6 +99,7 @@
             android:gravity="bottom"
             android:textColor="@color/white"
             android:textSize="14sp"
+            android:layout_marginStart="@dimen/space_normal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/fuelTypeIcon"
             app:layout_constraintTop_toTopOf="parent"

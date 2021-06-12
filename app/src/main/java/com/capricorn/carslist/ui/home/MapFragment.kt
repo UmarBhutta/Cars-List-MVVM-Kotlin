@@ -1,5 +1,6 @@
 package com.capricorn.carslist.ui.home
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -22,6 +23,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
@@ -158,7 +160,8 @@ class MapFragment : Fragment(),OnMapReadyCallback,GoogleMap.OnMarkerClickListene
             googleMap ?: return
             with(googleMap){
                 cars.forEach{
-                    addMarker(MarkerOptions().position(LatLng(it.latitude,it.longitude)).snippet(it.id))
+                    addMarker(MarkerOptions().position(LatLng(it.latitude,it.longitude)).snippet(it.id)
+                        .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(context?.resources,R.drawable.marker_custom))))
                 }
                 val lastItem = cars.last()
                 moveCamera(CameraUpdateFactory.newLatLngZoom(
@@ -189,7 +192,7 @@ class MapFragment : Fragment(),OnMapReadyCallback,GoogleMap.OnMarkerClickListene
 
 
     private fun loadCarImage(imageUrl:String?){
-        val requestOptions = RequestOptions().placeholder(R.drawable.placeholder).fitCenter()
+        val requestOptions = RequestOptions().placeholder(R.drawable.placeholder).centerInside()
 
         Glide.with(requireActivity()).
         load(imageUrl).apply(requestOptions)
