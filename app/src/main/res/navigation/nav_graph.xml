@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/MapFragment"
-        android:name="com.capricorn.carslist.ui.home.MapFragment"
+        android:name="com.capricorn.carslist.ui.home.map.MapFragment"
         android:label="@string/map_fragment_label"
         tools:layout="@layout/fragment_map">
 
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/ListFragment"
-        android:name="com.capricorn.carslist.ui.home.ListFragment"
+        android:name="com.capricorn.carslist.ui.home.list.ListFragment"
         android:label="@string/List_fragment_label"
         tools:layout="@layout/fragment_list">
 

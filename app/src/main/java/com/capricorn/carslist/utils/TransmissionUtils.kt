@@ -12,7 +12,7 @@ import javax.inject.Inject
  */
 class TransmissionUtils @Inject constructor(@ApplicationContext val context: Context) : TransmissionSpecification {
 
-    override fun getTransmissionIcon(transmissionType:String) : Drawable?{
+    override fun getTransmissionIcon(transmissionType:String?) : Drawable?{
         return when(transmissionType){
             "A" -> AppCompatResources.getDrawable(context,R.drawable.fuse)
             "M" -> AppCompatResources.getDrawable(context,R.drawable.car_shift_pattern)
@@ -20,7 +20,7 @@ class TransmissionUtils @Inject constructor(@ApplicationContext val context: Con
         }
     }
 
-    override fun getTransmissionName(transmissionType: String): String {
+    override fun getTransmissionName(transmissionType: String?): String {
         return when(transmissionType){
             "A" -> context.getString(R.string.automatic_transmission)
             "M" -> context.getString(R.string.manual_transmission)
@@ -30,6 +30,6 @@ class TransmissionUtils @Inject constructor(@ApplicationContext val context: Con
 }
 
 interface TransmissionSpecification{
-    fun getTransmissionIcon(transmissionType:String) : Drawable?
-    fun getTransmissionName(transmissionType:String) : String
+    fun getTransmissionIcon(transmissionType:String?) : Drawable?
+    fun getTransmissionName(transmissionType:String?) : String
 }

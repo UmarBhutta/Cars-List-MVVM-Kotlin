@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/black"
+    android:paddingTop="@dimen/space_double"
+    android:paddingStart="@dimen/space_double"
+    android:paddingEnd="@dimen/space_double"
+    android:paddingBottom="@dimen/space_double">
+
+
+    <TextView
+        android:id="@+id/carName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingStart="@dimen/space_normal"
+        android:paddingTop="4dp"
+        android:paddingEnd="@dimen/space_normal"
+        android:paddingBottom="4dp"
+        android:textAllCaps="true"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/carImage"
+        app:layout_constraintEnd_toStartOf="@+id/carImage"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Mini Cooper" />
+
+    <ImageView
+        android:id="@+id/carImage"
+        android:layout_width="80dp"
+        android:layout_height="55dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/space_normal"
+        android:scaleType="centerInside"
+        tools:srcCompat="@drawable/placeholder" />
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

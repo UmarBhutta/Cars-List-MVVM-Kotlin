@@ -1,4 +1,4 @@
-package com.capricorn.carslist.ui.home
+package com.capricorn.carslist.ui.home.map
 
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -6,13 +6,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast.LENGTH_LONG
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+import androidx.lifecycle.LiveData
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.capricorn.carslist.R
 import com.capricorn.carslist.data.Resource
@@ -27,7 +27,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.trafi.anchorbottomsheetbehavior.AnchorBottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -51,7 +50,6 @@ class MapFragment : Fragment(),OnMapReadyCallback,GoogleMap.OnMarkerClickListene
     private lateinit var mapView: MapView
     private lateinit var googleMap: GoogleMap
     private lateinit var bottomSheetBehavior: AnchorBottomSheetBehavior<ConstraintLayout>
-    private lateinit var carList:List<Car>
 
 
 
@@ -96,9 +94,8 @@ class MapFragment : Fragment(),OnMapReadyCallback,GoogleMap.OnMarkerClickListene
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observerViewModel()
-        binding.buttonFirst.setOnClickListener {
-            //findNavController().navigate(R.id.action_MapFragment_to_ListFragment)
-            findNavController().navigate(R.id.action_MapFragment_to_CarDetailFragment)
+        binding.floatingActionButton.setOnClickListener {
+            findNavController().navigate(R.id.action_MapFragment_to_ListFragment)
         }
 
 
@@ -151,12 +148,8 @@ class MapFragment : Fragment(),OnMapReadyCallback,GoogleMap.OnMarkerClickListene
     }
 
     private fun bindListData(cars: List<Car>) {
+        hideLoadingView()
         if (!(cars.isNullOrEmpty())) {
-
-           carList = cars
-//            recipesAdapter = RecipesAdapter(recipesListViewModel, recipes.recipesList)
-//            binding.rvRecipesList.adapter = recipesAdapter
-            showDataView(true)
             googleMap ?: return
             with(googleMap){
                 cars.forEach{
@@ -169,36 +162,26 @@ class MapFragment : Fragment(),OnMapReadyCallback,GoogleMap.OnMarkerClickListene
                     ZOOM_LEVEL
                ))
             }
-        } else {
-            showDataView(false)
         }
     }
 
-    private fun showDataView(show: Boolean) {
-
-
-
-//        binding.tvNoData.visibility = if (show) GONE else VISIBLE
-//        binding.rvRecipesList.visibility = if (show) VISIBLE else GONE
-//        binding.pbLoading.toGone()
-
+    private fun showLoadingView(){
+        binding.progressBar.visible()
     }
 
-    private fun showLoadingView() {
-//        binding.pbLoading.toVisible()
-//        binding.tvNoData.toGone()
-//        binding.rvRecipesList.toGone()
+    private fun hideLoadingView(){
+        binding.progressBar.gone()
     }
 
 
-    private fun loadCarImage(imageUrl:String?){
-        val requestOptions = RequestOptions().placeholder(R.drawable.placeholder).centerInside()
-
-        Glide.with(requireActivity()).
-        load(imageUrl).apply(requestOptions)
-            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-            .into(binding.carBottomSheet.carImage)
+    private fun observeSnackBarMessages(event: LiveData<SingleEvent<Any>>) {
+        binding.root.setupSnackbar(this, event, LENGTH_LONG)
     }
+
+    private fun observeToast(event: LiveData<SingleEvent<Any>>) {
+        binding.root.showToast(this, event, LENGTH_LONG)
+    }
+
 
     private fun setupCarFuelTypeDetails(fuelLevel: Double?,fuelType:String?){
 
@@ -206,25 +189,28 @@ class MapFragment : Fragment(),OnMapReadyCallback,GoogleMap.OnMarkerClickListene
         binding.carBottomSheet.fuelTypeIcon.setImageDrawable(fuelUtils.getFuelTypeIcon(fuelType))
     }
 
-    private fun setupCarTransmissionType(transmission:String){
+    private fun setupCarTransmissionType(transmission:String?){
         binding.carBottomSheet.transmissionType.text = transmissionUtils.getTransmissionName(transmission)
         binding.carBottomSheet.transmissionTypeIcon.setImageDrawable(transmissionUtils.getTransmissionIcon(transmission))
     }
 
 
-    private fun showCarDetails(car: Car){
-        //setting up car model Name
-        binding.carBottomSheet.carName.text =  car.modelName
-        //setting up cleaning status
-        binding.carBottomSheet.cleanStatus.text = interiorUtils.getVehicleCleanliness(car.innerCleanliness)
-        //setting up fuel details
-        setupCarFuelTypeDetails(car.fuelLevel,car.fuelType)
-        //setting up transmission details
-        setupCarTransmissionType(car.transmission)
-        //Car Image Loading
-        loadCarImage(car.carImageUrl)
+    private fun showCarDetails(carDetailEvent: SingleEvent<Car>){
+        carDetailEvent.getContentIfNotHandled().let { car ->
+            //setting up car model Name
+            binding.carBottomSheet.carName.text =  car?.modelName
+            //setting up cleaning status
+            binding.carBottomSheet.cleanStatus.text = interiorUtils.getVehicleCleanliness(car?.innerCleanliness)
+            //setting up fuel details
+            setupCarFuelTypeDetails(car?.fuelLevel,car?.fuelType)
+            //setting up transmission details
+            setupCarTransmissionType(car?.transmission)
+            //Car Image Loading
+            binding.carBottomSheet.carImage.loadImage(car?.carImageUrl)
 
-        bottomSheetBehavior.state = AnchorBottomSheetBehavior.STATE_ANCHORED
+            bottomSheetBehavior.state = AnchorBottomSheetBehavior.STATE_ANCHORED
+        }
+
     }
 
     private fun handleCarsList(status: Resource<List<Car>>) {
@@ -232,14 +218,16 @@ class MapFragment : Fragment(),OnMapReadyCallback,GoogleMap.OnMarkerClickListene
             is Resource.Loading -> showLoadingView()
             is Resource.Success -> status.data?.let { bindListData(cars = it) }
             is Resource.Error -> {
-                showDataView(false)
-                //status.errorCode?.let { recipesListViewModel.showToastMessage(it) }
+                status.errorCode?.let { mapFragmentViewModel.showToastMessage(it) }
             }
         }
     }
 
     private fun observerViewModel(){
         mapFragmentViewModel.carListLiveData.observe(viewLifecycleOwner, ::handleCarsList)
+        mapFragmentViewModel.openCarDetails.observe(viewLifecycleOwner,::showCarDetails)
+        observeSnackBarMessages(mapFragmentViewModel.showSnackBar)
+        observeToast(mapFragmentViewModel.showToast)
     }
 
 
@@ -250,11 +238,8 @@ class MapFragment : Fragment(),OnMapReadyCallback,GoogleMap.OnMarkerClickListene
 
     override fun onMarkerClick(marker: Marker): Boolean {
 
-        val carItem = carList.filter { it.id == marker.snippet }.let {
-            it.first()
-        }
+        mapFragmentViewModel.showCarDetailsBottomSheet(marker.snippet)
 
-        showCarDetails(carItem)
         return true
     }
 }
