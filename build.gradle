@@ -21,6 +21,7 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        maven { url 'https://jitpack.io' }
         jcenter() // Warning: this repository is going to shut down soon
     }
 }
@@ -52,6 +53,12 @@ ext{
     retrofitVersion = '2.9.0'
     gsonConvertorVersion = '2.9.0'
     okhttpVersion = '4.9.0'
+
+    //glide
+    glideVersion = '4.12.0'
+
+    //anchor sheet
+    anchorSheetBehaviourVersion = '0.13-alpha'
 
     //Testing dep version
     junitVersion = '5.7.0'

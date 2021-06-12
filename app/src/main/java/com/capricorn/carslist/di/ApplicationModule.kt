@@ -1,8 +1,7 @@
 package com.capricorn.carslist.di
 
 import android.content.Context
-import com.capricorn.carslist.utils.NetworkConnectivity
-import com.capricorn.carslist.utils.NetworkUtils
+import com.capricorn.carslist.utils.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,6 +29,24 @@ class ApplicationModule {
     @Singleton
     fun provideNetworkConnectivity(@ApplicationContext context: Context): NetworkConnectivity {
         return NetworkUtils(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFuelSpecification(@ApplicationContext context: Context) : FuelSpecification{
+        return FuelUtils(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTransmissionSpecification(@ApplicationContext context: Context) : TransmissionSpecification{
+        return TransmissionUtils(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideVehicleCleanliness(@ApplicationContext context: Context) : VehicleCleanliness{
+        return InteriorUtils(context)
     }
 
 }

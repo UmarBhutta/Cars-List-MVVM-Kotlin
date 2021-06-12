@@ -22,4 +22,15 @@
     <string name="no_internet">Please check your internet connection</string>
     <string name="network_error">Network error, could get data,please try again!</string>
 
+    <!-- Strings used for Transmission Details -->
+    <string name="automatic_transmission">Automatic</string>
+    <string name="manual_transmission">Manual</string>
+
+    <!-- Strings used for Cleanliness details -->
+    <string name="clean">Clean</string>
+    <string name="very_clean">Very Clean</string>
+    <string name="regular">Regular</string>
+
+
+
 </resources>

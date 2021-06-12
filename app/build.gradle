@@ -105,6 +105,13 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:17.0.1'
     implementation 'com.google.maps.android:maps-ktx:3.0.1'
 
+    //Glide
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
+    annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
+
+    //Anchor Sheet Behaviour
+    implementation "com.trafi:anchor-bottom-sheet-behavior:$anchorSheetBehaviourVersion"
+
 
 
     //testing Dependencies

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/black"
+    android:paddingTop="@dimen/space_double"
+    android:paddingStart="@dimen/space_double"
+    android:paddingEnd="@dimen/space_double"
+    android:paddingBottom="@dimen/space_double_double"
+    app:behavior_anchorOffset="12dp"
+    app:behavior_defaultState="collapsed"
+    app:behavior_peekHeight="0dp"
+    app:layout_behavior="com.trafi.anchorbottomsheetbehavior.AnchorBottomSheetBehavior">
+
+    <View
+        android:id="@+id/handle_light"
+        android:layout_width="?actionBarSize"
+        android:layout_height="3dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:alpha="1"
+        android:background="@color/white"
+        android:padding="@dimen/space_normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/carName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_double"
+        android:background="@color/white"
+        android:paddingStart="@dimen/space_normal"
+        android:paddingTop="4dp"
+        android:paddingEnd="@dimen/space_normal"
+        android:paddingBottom="4dp"
+        android:textAllCaps="true"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/carImage"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Mini Cooper" />
+
+    <ImageView
+        android:id="@+id/carImage"
+        android:layout_width="160dp"
+        android:layout_height="110dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/space_normal"
+        android:scaleType="fitCenter"
+        tools:srcCompat="@drawable/placeholder" />
+
+    <TextView
+        android:id="@+id/cleanStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:textColor="@color/blue"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/iconContainer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/carName"
+        tools:text="Clean" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/iconContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/carImage"
+        app:layout_constraintEnd_toStartOf="@+id/carImage"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent">
+
+
+        <ImageView
+            android:id="@+id/fuelTypeIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginEnd="@dimen/space_normal"
+            android:src="@drawable/outline_battery_std_24"
+            />
+        <TextView
+            android:id="@+id/fuelType"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/fuelTypeIcon"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="0.4" />
+
+
+        <ImageView
+            android:id="@+id/transmissionTypeIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/fuelType"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="@dimen/space_double"
+            android:layout_marginEnd="@dimen/space_normal"
+            android:src="@drawable/car_shift_pattern"
+            />
+
+        <TextView
+            android:id="@+id/transmissionType"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:layout_marginStart="@dimen/space_normal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/transmissionTypeIcon"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Automatic" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/white"
+        app:layout_constraintTop_toBottomOf="@+id/iconContainer"
+        android:layout_marginTop="@dimen/space_double"
+        android:layout_marginBottom="@dimen/space_double"
+         />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
