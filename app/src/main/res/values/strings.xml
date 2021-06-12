@@ -2,8 +2,8 @@
     <string name="app_name">Cars List</string>
     <string name="title_activity_main">MainActivity</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="map_fragment_label">Map Fragment</string>
-    <string name="List_fragment_label">List Fragment</string>
+    <string name="map_fragment_label">Cars Map View</string>
+    <string name="List_fragment_label">Cars List View</string>
     <string name="car_detail_label">Car Detail</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
