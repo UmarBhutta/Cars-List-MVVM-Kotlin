@@ -28,7 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 /**
- * A simple [Fragment] subclass as the second destination in the navigation.
+ * [ListFragment] Fragment to display list of the Cars fetched through the viewModel
  */
 
 @AndroidEntryPoint
@@ -57,6 +57,8 @@ class ListFragment : Fragment() {
     ): View? {
 
         _binding = FragmentListBinding.inflate(inflater, container, false)
+
+        //Setting up AnchorBottomSheetBehavior to display car details
         bottomSheetBehavior = AnchorBottomSheetBehavior.from(binding.carBottomSheet.root)
         bottomSheetBehavior.addBottomSheetCallback(object:AnchorBottomSheetBehavior.BottomSheetCallback(){
 
@@ -69,29 +71,39 @@ class ListFragment : Fragment() {
             }
 
         })
+
         return binding.root
 
     }
 
-    private fun getSlideOffsetForFloatingButton(bottomSheet: View, slideOffset: Float):Float{
-        return if(slideOffset <= 0) (bottomSheet.y + bottomSheetBehavior.peekHeight -  binding.floatingActionButton.height-32) else (bottomSheet.y - binding.floatingActionButton.height - 32).toFloat()
-    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //start observing the view model changes
         observeViewModel()
 
-        val layoutManager = LinearLayoutManager(requireContext())
-        binding.rvCarList.layoutManager = layoutManager
-        binding.rvCarList.setHasFixedSize(true)
-        binding.rvCarList.setDivider(R.drawable.recycler_view_divider)
+        //setup Recyclerview
+        setupRecyclerView()
 
         binding.floatingActionButton.setOnClickListener {
             findNavController().navigate(R.id.action_ListFragment_to_MapFragment)
         }
 
+        // viewModel to get CarList
         carListFragmentViewModel.getCarList()
 
+    }
+
+    /**
+     * Setup Recycler View to display List
+     */
+
+    private fun setupRecyclerView(){
+        val layoutManager = LinearLayoutManager(requireContext())
+        binding.rvCarList.layoutManager = layoutManager
+        binding.rvCarList.setHasFixedSize(true)
+        binding.rvCarList.setDivider(R.drawable.recycler_view_divider)
     }
 
     override fun onDestroyView() {
@@ -99,18 +111,26 @@ class ListFragment : Fragment() {
         _binding = null
     }
 
-
+    /**
+     * [showDataView] method used to show data on the screen when it is available from service
+     */
     private fun showDataView(show: Boolean) {
         binding.noData.visibility = if (show) GONE else VISIBLE
         binding.rvCarList.visibility = if (show) VISIBLE else GONE
         binding.progressBar.gone()
     }
 
+    /**
+     * [showLoadingView] method used to show loading on the screen
+     */
     private fun showLoadingView() {
         binding.progressBar.visible()
         binding.rvCarList.gone()
     }
 
+    /**
+     * [bindListData] method to build ListView from Data
+     */
     private fun bindListData(cars: List<Car>) {
         if (!(cars.isNullOrEmpty())) {
             carsAdapter = CarsAdapter(carListFragmentViewModel, cars)
@@ -121,7 +141,9 @@ class ListFragment : Fragment() {
         }
     }
 
-
+    /**
+     * [handleCarsList] method to handle List of car from ViewModel Observer
+     */
     private fun handleCarsList(status: Resource<List<Car>>) {
         when (status) {
             is Resource.Loading -> showLoadingView()
@@ -133,12 +155,25 @@ class ListFragment : Fragment() {
         }
     }
 
+    /**
+     * [observeSnackBarMessages] method show snack bar message
+     */
     private fun observeSnackBarMessages(event: LiveData<SingleEvent<Any>>) {
         binding.root.setupSnackbar(this, event, LENGTH_LONG)
     }
 
+    /**
+     * [observeToast] method show Toast message
+     */
     private fun observeToast(event: LiveData<SingleEvent<Any>>) {
         binding.root.showToast(this, event, LENGTH_LONG)
+    }
+
+    /**
+     * [getSlideOffsetForFloatingButton] Slide Offset of floating button relative to [bottomSheet] with its [slideOffset]
+     */
+    private fun getSlideOffsetForFloatingButton(bottomSheet: View, slideOffset: Float):Float{
+        return if(slideOffset <= 0) (bottomSheet.y + bottomSheetBehavior.peekHeight -  binding.floatingActionButton.height-32) else (bottomSheet.y - binding.floatingActionButton.height - 32).toFloat()
     }
 
      fun observeViewModel() {
@@ -149,19 +184,26 @@ class ListFragment : Fragment() {
 
     }
 
-
+    /**
+     * [setupCarFuelTypeDetails] set current viewing car Fuel Type Details
+     */
     private fun setupCarFuelTypeDetails(fuelLevel: Double?,fuelType:String?){
 
         binding.carBottomSheet.fuelType.text = fuelLevel.toString()
         binding.carBottomSheet.fuelTypeIcon.setImageDrawable(fuelUtils.getFuelTypeIcon(fuelType))
     }
 
+    /**
+     * [setupCarTransmissionType] set current viewing car Transmission Type
+     */
     private fun setupCarTransmissionType(transmission:String?){
         binding.carBottomSheet.transmissionType.text = transmissionUtils.getTransmissionName(transmission)
         binding.carBottomSheet.transmissionTypeIcon.setImageDrawable(transmissionUtils.getTransmissionIcon(transmission))
     }
 
-
+    /**
+     * [showCarDetails] Method to show Car Details in the bottom sheet
+     */
     private fun showCarDetails(carDetailEvent: SingleEvent<Car>){
         carDetailEvent.getContentIfNotHandled().let { car ->
             //setting up car model Name

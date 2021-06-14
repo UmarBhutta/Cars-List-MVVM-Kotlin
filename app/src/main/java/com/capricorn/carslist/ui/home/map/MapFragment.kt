@@ -23,16 +23,16 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import com.trafi.anchorbottomsheetbehavior.AnchorBottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 /**
- * A simple [Fragment] subclass as the default destination in the navigation.
+ * [MapFragment]  the default destination in the navigation.
+ *
+ * Representing the cars on the map with markers
+ *
  */
 
 @AndroidEntryPoint
@@ -64,13 +64,14 @@ class MapFragment : Fragment(),OnMapReadyCallback,GoogleMap.OnMarkerClickListene
 
         _binding = FragmentMapBinding.inflate(inflater, container, false)
 
-        //getting the map view here
+        //setting up the map view
         mapView = binding.map
-
         mapView.onCreate(savedInstanceState)
 
+        //requesting the map
         mapView.getMapAsync(this)
 
+        //Setting up AnchorBottomSheetBehavior to display car details
         bottomSheetBehavior = AnchorBottomSheetBehavior.from(binding.carBottomSheet.root)
         bottomSheetBehavior.addBottomSheetCallback(object:AnchorBottomSheetBehavior.BottomSheetCallback(){
 
@@ -83,17 +84,17 @@ class MapFragment : Fragment(),OnMapReadyCallback,GoogleMap.OnMarkerClickListene
             }
 
         })
+
         return binding.root
 
     }
 
-    private fun getSlideOffsetForFloatingButton(bottomSheet: View, slideOffset: Float):Float{
-        return if(slideOffset <= 0) (bottomSheet.y + bottomSheetBehavior.peekHeight -  binding.floatingActionButton.height-32) else (bottomSheet.y - binding.floatingActionButton.height - 32).toFloat()
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //start observing the view models
         observerViewModel()
+
         binding.floatingActionButton.setOnClickListener {
             findNavController().navigate(R.id.action_MapFragment_to_ListFragment)
         }
@@ -143,58 +144,91 @@ class MapFragment : Fragment(),OnMapReadyCallback,GoogleMap.OnMarkerClickListene
         _googleMap ?: return
         googleMap = _googleMap
         googleMap.setOnMarkerClickListener(this)
+
+        //viewModel to get CarList
         mapFragmentViewModel.getCarList()
 
     }
 
+    /**
+     * [bindListData] method to build ListView from Data
+     */
     private fun bindListData(cars: List<Car>) {
         hideLoadingView()
         if (!(cars.isNullOrEmpty())) {
             googleMap ?: return
             with(googleMap){
+
+                //setting up bounds of the map so that mapview can be focus on the centre
+                val firstItem = cars.first()
+                val bounds = LatLngBounds.builder().include(LatLng(firstItem.latitude,firstItem.longitude)).build()
+
+                //adding markers to the maps with the custom marker image
                 cars.forEach{
-                    addMarker(MarkerOptions().position(LatLng(it.latitude,it.longitude)).snippet(it.id)
-                        .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(context?.resources,R.drawable.marker_custom))))
+                    val latLong = LatLng(it.latitude,it.longitude)
+                    addMarker(MarkerOptions().position(latLong).snippet(it.id)
+                        .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(context?.resources,R.drawable.ic_marker_magenta))))
+                    bounds.including(latLong)
                 }
-                val lastItem = cars.last()
-                moveCamera(CameraUpdateFactory.newLatLngZoom(
-                    LatLng(lastItem.latitude,lastItem.longitude),
+
+                //moving camera to the centre of the LatLong Bounds
+                moveCamera(CameraUpdateFactory.newLatLngZoom(bounds.center,
                     ZOOM_LEVEL
                ))
+
+
             }
         }
     }
 
+    /**
+     * [showLoadingView] method used to show loading on the screen
+     */
     private fun showLoadingView(){
         binding.progressBar.visible()
     }
 
+    /**
+     * [showLoadingView] method used to hide loading on the screen
+     */
     private fun hideLoadingView(){
         binding.progressBar.gone()
     }
 
-
+    /**
+     * [observeSnackBarMessages] method show snack bar message
+     */
     private fun observeSnackBarMessages(event: LiveData<SingleEvent<Any>>) {
         binding.root.setupSnackbar(this, event, LENGTH_LONG)
     }
 
+    /**
+     * [observeToast] method show Toast message
+     */
     private fun observeToast(event: LiveData<SingleEvent<Any>>) {
         binding.root.showToast(this, event, LENGTH_LONG)
     }
 
-
+    /**
+     * [setupCarFuelTypeDetails] set current viewing car Fuel Type Details
+     */
     private fun setupCarFuelTypeDetails(fuelLevel: Double?,fuelType:String?){
 
         binding.carBottomSheet.fuelType.text = fuelLevel.toString()
         binding.carBottomSheet.fuelTypeIcon.setImageDrawable(fuelUtils.getFuelTypeIcon(fuelType))
     }
 
+    /**
+     * [setupCarTransmissionType] set current viewing car Transmission Type
+     */
     private fun setupCarTransmissionType(transmission:String?){
         binding.carBottomSheet.transmissionType.text = transmissionUtils.getTransmissionName(transmission)
         binding.carBottomSheet.transmissionTypeIcon.setImageDrawable(transmissionUtils.getTransmissionIcon(transmission))
     }
 
-
+    /**
+     * [showCarDetails] Method to show Car Details in the bottom sheet
+     */
     private fun showCarDetails(carDetailEvent: SingleEvent<Car>){
         carDetailEvent.getContentIfNotHandled().let { car ->
             //setting up car model Name
@@ -213,6 +247,9 @@ class MapFragment : Fragment(),OnMapReadyCallback,GoogleMap.OnMarkerClickListene
 
     }
 
+    /**
+     * [handleCarsList] method to handle List of car from ViewModel Observer
+     */
     private fun handleCarsList(status: Resource<List<Car>>) {
         when (status) {
             is Resource.Loading -> showLoadingView()
@@ -230,10 +267,17 @@ class MapFragment : Fragment(),OnMapReadyCallback,GoogleMap.OnMarkerClickListene
         observeToast(mapFragmentViewModel.showToast)
     }
 
+    /**
+     * [getSlideOffsetForFloatingButton] Slide Offset of floating button relative to [bottomSheet] with its [slideOffset]
+     */
+    private fun getSlideOffsetForFloatingButton(bottomSheet: View, slideOffset: Float):Float{
+        return if(slideOffset <= 0) (bottomSheet.y + bottomSheetBehavior.peekHeight -  binding.floatingActionButton.height-32) else (bottomSheet.y - binding.floatingActionButton.height - 32).toFloat()
+    }
+
 
     companion object {
         private const val MAPVIEW_BUNDLE_KEY = "MapViewBundleKey"
-        val ZOOM_LEVEL = 13f
+        val ZOOM_LEVEL = 12f
     }
 
     override fun onMarkerClick(marker: Marker): Boolean {

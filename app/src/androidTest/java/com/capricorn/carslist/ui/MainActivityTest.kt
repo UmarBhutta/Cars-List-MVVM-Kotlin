@@ -28,6 +28,9 @@ import org.junit.After
 
 /**
  * Created by Muhammad Umar on 14/06/2021.
+ *
+ * Navigation Test for the MainActivity Navigation Graph
+ *
  */
 
 @RunWith(AndroidJUnit4ClassRunner::class)
