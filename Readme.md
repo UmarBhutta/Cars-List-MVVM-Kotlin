@@ -1,6 +1,6 @@
-# Car List
+# Cars List
 
-Car List is sample app, which fetch the Cars list form the server and show them on the map as marker and also display them as plain list.
+Cars List is sample app, which fetch the Cars list form the server and show them on the map as marker and also display them as plain list.
 The main goal of this app is to be a sample of how to build an high quality Android application that uses the Architecture components,MVVM,Coroutines,Jetpack,Hilt,Google Maps, etc. in Kotlin.
 
 ## Architecture
@@ -15,9 +15,9 @@ The app uses MVVM [Model-View-ViewModel] architecture to have a unidirectional f
 - Consider edge cases, leaks and how long-running operations can affect the instances in your architecture.
 - Don’t put logic in the ViewModel that is critical to saving clean state or related to data. Any call you make from a ViewModel can be the last one.
 
-**Keep your code clean according to MVVM**
+**Keep code clean according to MVVM**
 -----------------------------
- - Yes , liveData is easy , powerful , but you should know how to use.
+ - LiveData is easy , powerful , but you should know how to use.
  - For livedata which will emit data stream , it has to be in your
    data layer , and don't inform those observables any thing else like
    in which thread those will consume , cause it is another
