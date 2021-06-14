@@ -1,6 +1,6 @@
 # Car List
 
-Car List is sample app, which fetch the Cars list form the server and show them on the map as marker and also on display them as plan list.
+Car List is sample app, which fetch the Cars list form the server and show them on the map as marker and also display them as plain list.
 The main goal of this app is to be a sample of how to build an high quality Android application that uses the Architecture components,MVVM,Coroutines,Jetpack,Hilt,Google Maps, etc. in Kotlin.
 
 ## Architecture
