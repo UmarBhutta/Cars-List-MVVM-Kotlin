@@ -29,8 +29,14 @@ android {
     }
 
     buildTypes {
-        release {
+        debug{
             minifyEnabled false
+            testCoverageEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        release {
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -41,8 +47,21 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    // Always show the result of every unit test, even if it passes.
+    testOptions.unitTests {
+        includeAndroidResources = true
+
+        all {
+            testLogging {
+                events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
+            }
+        }
+    }
+
     buildFeatures {
         viewBinding true
+
     }
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
@@ -61,6 +80,14 @@ android {
             exclude group: "org.jetbrains.kotlinx", module: "kotlinx-coroutines-debug"
 
         }
+    }
+}
+
+kapt {
+    arguments {
+        // Make Hilt share the same definition of Components in tests instead of
+        // creating a new set of Components per test class.
+        arg("dagger.hilt.shareTestComponents", "true")
     }
 }
 
@@ -107,7 +134,7 @@ dependencies {
 
     //Glide
     implementation "com.github.bumptech.glide:glide:$glideVersion"
-    annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
+    kapt "com.github.bumptech.glide:compiler:$glideVersion"
 
     //Anchor Sheet Behaviour
     implementation "com.trafi:anchor-bottom-sheet-behavior:$anchorSheetBehaviourVersion"
@@ -123,6 +150,16 @@ dependencies {
     implementation "androidx.arch.core:core-testing:$coreTestingVersion"
     implementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"
     implementation "androidx.test.espresso:espresso-contrib:$espressoVersion"
+
+
+    // AndroidX Test - JVM testing
+    testImplementation "androidx.test:core-ktx:$androidXTestCoreVersion"
+    testImplementation "androidx.test.ext:junit-ktx:$androidXTestExtKotlinRunnerVersion"
+    testImplementation "androidx.test:rules:$androidXTestRulesVersion"
+    // Once https://issuetracker.google.com/127986458 is fixed this can be testImplementation
+    debugImplementation "androidx.fragment:fragment-testing:$fragmentVersion"
+    implementation "androidx.test:core:$androidXTestCoreVersion"
+    implementation "androidx.fragment:fragment:$fragmentVersion"
 }
 
 secrets {
