@@ -2,7 +2,9 @@
     package="com.capricorn.carslist">
 
     <application>
-
+        <activity
+            android:name="com.capricon.carlist.HiltTestActivity"
+            android:exported="false"  />
     </application>
 
 </manifest>
