@@ -164,6 +164,7 @@ dependencies {
     testImplementation "io.mockk:mockk:$mockVersion"
     androidTestImplementation "org.assertj:assertj-core:$assertjVersion"
     androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoIntentsVersion"
+    androidTestImplementation "androidx.navigation:navigation-testing:$navVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesTestVersion"
     implementation "androidx.arch.core:core-testing:$coreTestingVersion"
     implementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"
@@ -178,6 +179,9 @@ dependencies {
     debugImplementation "androidx.fragment:fragment-testing:$fragmentVersion"
     implementation "androidx.test:core:$androidXTestCoreVersion"
     implementation "androidx.fragment:fragment:$fragmentVersion"
+
+    androidTestImplementation "com.google.truth:truth:1.0.1"
+
 }
 
 secrets {
